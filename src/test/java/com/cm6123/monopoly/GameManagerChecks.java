@@ -1,11 +1,11 @@
 package com.cm6123.monopoly;
 
-import com.cm6123.monopoly.game.Board;
-import com.cm6123.monopoly.game.GameManager;
-import com.cm6123.monopoly.game.Player;
+import com.cm6123.monopoly.app.UserInputManager;
+import com.cm6123.monopoly.game.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -58,33 +58,9 @@ public class GameManagerChecks {
         when(players.get(1).rollDice()).thenReturn(3);
         when(players.get(2).rollDice()).thenReturn(2);
 
-        gameManager.playerTurnSystem(1,board);
+        gameManager.playerTurnSystem(1,board,board.initiateBoard());
 
         verify(players.get(1), times(1)).rollDice();
         verify(players.get(2), times(1)).rollDice();
-
-        // GameManager gameManager = spy(new GameManager());
-
-        // Player player1 = mock(Player.class);
-        // Player player2 = mock(Player.class);
-        // Board board = mock(Board.class);
-
-        // HashMap<Integer, Player> players = new HashMap<>();
-        // players.put(1, player1);
-        // players.put(2, player2);
-
-        // doReturn(players).when(gameManager).createPlayers(2);
-        // gameManager.createPlayers(2);
-        // doNothing().when(gameManager).determineWinner(any());
-
-        // when(player1.rollDice()).thenReturn(3);
-        // when(player2.rollDice()).thenReturn(2);
-
-        // gameManager.playerTurnSystem(1, board);
-        // verify(player1, times(1)).rollDice();
-        // verify(player2, times(1)).rollDice();
-        // verify(board).setNewPlayerPosition(player1, 4);
-        // verify(board).setNewPlayerPosition(player2, 3);
-
     }
 }

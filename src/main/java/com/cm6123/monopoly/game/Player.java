@@ -70,4 +70,11 @@ public class Player {
     public void addBalance(final float newMoney){
         this.balance = balance + newMoney;
     }
+    /**
+     * Takes away the player balance by the passed in amount.
+     * @param subMoneyAmount The amount of money you want to be substracted from the player.
+     */
+    public void subBalance(final float subMoneyAmount){
+        this.balance = balance - subMoneyAmount;
+    }
 }

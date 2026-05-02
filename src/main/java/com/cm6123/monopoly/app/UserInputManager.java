@@ -1,5 +1,6 @@
 package com.cm6123.monopoly.app;
 
+
 import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -81,5 +82,29 @@ public class UserInputManager {
         }
         while (verifyingUserDesiredBoardSize < 10 || verifyingUserDesiredBoardSize > 50 || verifyingUserDesiredBoardSize == -1);
         return verifyingUserDesiredBoardSize;
+    }
+    /**
+     * Gets the choice from the player whether they want to buy the property or not.
+     * @return True for yes the player wants to buy the property and False if the Player doesn't want to buy the property.
+     */
+    public boolean doesPlayerWantToBuyProperty() {
+        System.out.println("Would you like to buy this property? (Yes/No)");
+        String choice = scanner.nextLine();
+        choice = choice.toLowerCase();
+        boolean validChoice = false;
+        do{
+            if (choice.equals("yes")) {
+                validChoice = true;
+                return true;
+            } else if (choice.equals("no")) {
+                validChoice = true;
+                return false;
+            } else {
+                scanner.nextLine();
+                System.out.println("Please enter yes or no");
+                choice = scanner.nextLine();
+                return false;
+            }
+        }while(!validChoice);
     }
 }

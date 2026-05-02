@@ -26,4 +26,11 @@ public abstract class SpaceSquare {
     public String getTypeOfSquare() {
         return this.squareType;
     }
+    /**
+     * Gets the position of the square.
+     * @return The position of the current square object.
+     */
+    public int getPositionOfSquare() {
+        return this.squarePosition;
+    }
 }
