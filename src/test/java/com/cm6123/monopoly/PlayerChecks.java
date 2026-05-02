@@ -50,5 +50,23 @@ public class PlayerChecks {
 
         assertEquals(4,p1.getPosition());
     }
+
+    @Test
+    public void WhenAPlayerIsSetToRecieve300MoneyAndTheirBalanceIs1000ThenTheNewBalanceIs1300() {
+        Player p1 = new Player(1);
+
+        p1.addBalance(300.00F);
+
+        assertEquals(1300.00F,p1.getPlayerBalance());
+    }
+
+    @Test
+    public void WhenAPlayerIsSetToLose300MoneyAndHad1000InTheirBalanceTheNewBalanceIs700() {
+        Player p1 = new Player(1);
+
+        p1.subBalance(300.00F);
+
+        assertEquals(700.00F,p1.getPlayerBalance());
+    }
 }
 
