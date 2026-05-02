@@ -29,7 +29,6 @@ public class Board {
      * @return The finished created board map.
      */
     public HashMap<Integer,SpaceSquare> initiateBoard() {
-        System.out.println(size);
         HomeSpace homeSpace = new HomeSpace();
         boardMap.put(1, homeSpace);
         for (int i = 2; i <= size; i++) {
@@ -105,6 +104,8 @@ public class Board {
             if(userInputManager.doesPlayerWantToBuyProperty()){
                 currentProperty.playerBuysProperty(currentPlayer);
             }
+        } else if (mapWHomeAndRoad.get(currentPlayer.getPosition()) instanceof Property currentProperty && currentProperty.returnOwner() != currentPlayer) {
+            currentProperty.carryOutRental(currentPlayer);
         }
     }
 }

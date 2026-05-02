@@ -57,4 +57,37 @@ public class BoardChecks {
         }
         assertEquals(6,count);
     }
+
+    @Test
+    public void WhenAPlayerLandsOnAPropertyAndTheyAreNotTheOwnerOfThePropertyTheyNeedToPayRent () {
+        Player player1 = new Player(1);
+        Player player2 = new Player(2);
+        Board board = new Board(10);
+        HashMap<Integer, SpaceSquare> hashBoard = board.initiateBoard();
+        Property property = new Property(3,300.00F,30.00F,"May Fair");
+
+        hashBoard.put(3,property);
+        player1.setPosition(3);
+        property.playerBuysProperty(player1);
+        player2.setPosition(3);
+        board.landedOn(hashBoard,player2);
+
+        assertEquals(970.00F, player2.getPlayerBalance());
+        assertEquals(730.00F, player1.getPlayerBalance());
+    }
+
+    @Test
+    public void WhenTheOwnerOfThePropertyLandsOnTheirPropertyNoMoneyShouldBeTaken () {
+        Player player1 = new Player(1);
+        Board board = new Board(10);
+        HashMap<Integer, SpaceSquare> hashBoard = board.initiateBoard();
+        Property property = new Property(3,300.00F,30.00F,"May Fair");
+
+        hashBoard.put(3,property);
+        player1.setPosition(3);
+        property.playerBuysProperty(player1);
+        board.landedOn(hashBoard,player1);
+
+        assertEquals(700.00F, player1.getPlayerBalance());
+    }
 }

@@ -95,4 +95,13 @@ public class Property extends SpaceSquare{
     public String getPropertyName() {
         return this.propertyName;
     }
+    /**
+     * Carries Out the rental Payment. Takes money away from the current player if they are not the owner and pays that money to the
+     * owner.
+     * @param currentPlayer Passes in the current player value.
+     */
+    public void carryOutRental(final Player currentPlayer) {
+        currentPlayer.subBalance(this.rentalPrice);
+        this.owner.addBalance(this.rentalPrice);
+    }
 }
