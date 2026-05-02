@@ -1,0 +1,98 @@
+package com.cm6123.monopoly.game;
+
+public class Property extends SpaceSquare{
+    /**
+     * Holds the property name.
+     */
+    private final String propertyName;
+    /**
+     * Holds the purchase value of the property.
+     */
+    private final float propertyValue;
+    /**
+     * Holds the rental value for the property.
+     */
+    private final float rentalPrice;
+    /**
+     * Contains the player object of the player who owns the property.
+     */
+    private Player owner;
+    /**
+     * The constructor for the property class.
+     *
+     * @param positionOfTheSquare Gives in the position of the square on the board
+     * @param valueOfProperty Passes in the value of the property. The buy price.
+     * @param valueOfRentalPrice Passes in the rental price for other players who aren't the owner.
+     * @param nameOfProperty Passes in the name of the property.
+     */
+    public Property(final int positionOfTheSquare, final Float valueOfProperty,final Float valueOfRentalPrice,final String nameOfProperty) {
+        super(positionOfTheSquare, "Property");
+        this.propertyValue = valueOfProperty;
+        this.rentalPrice = valueOfRentalPrice;
+        this.propertyName = nameOfProperty;
+    }
+    /**
+     * Sets a player class as the property owner.
+     * @param ownerPlayer
+     */
+    public void setOwner(final Player ownerPlayer) {
+        this.owner = ownerPlayer;
+    }
+    /**
+     * Returns the value of the current property object.
+     * @return The Value of the property.
+     */
+    public float getValueOfProperty() {
+        return this.propertyValue;
+    }
+    /**
+     * Returns the rental price of this property object.
+     * @return The value of the rental price.
+     */
+    public float getRentalPrice() {
+        return this.rentalPrice;
+    }
+    /**
+     * Returns the Player class object of the player who has bought the property.
+     * @return The Player object of the player who has bought the property.
+     */
+    public Player returnOwner() {
+        return this.owner;
+    }
+    /**
+     * Carries out the transaction for the player buying this property object.
+     * @param purchasingPlayer
+     */
+    public void playerBuysProperty(final Player purchasingPlayer) {
+        if (this.owner == null){ // REMOVE THIS WHEN YOU ADD RENTALS.
+            if (playerCanBuyProperty(purchasingPlayer.getPlayerBalance())) {
+                float playerBalance = purchasingPlayer.getPlayerBalance();
+                purchasingPlayer.subBalance(propertyValue);
+                setOwner(purchasingPlayer);
+                System.out.println("Player "+purchasingPlayer.getPlayerNumber()+" has bought " +propertyName);
+            }else{
+                System.out.println("Player "+purchasingPlayer.getPlayerNumber()+" don't have enough balance");
+            }
+        }else{
+            System.out.println("Player "+owner.getPlayerNumber()+" owns this property");
+        }
+    }
+    /**
+     * Checks if the player has enough funds to buy the property.
+     * @param playerBalance Passes in the player whose making the purchase's balance.
+     * @return True if the player can buy and has sufficiant funds or False if they can't.
+     */
+    public boolean playerCanBuyProperty(final float playerBalance) {
+        if (playerBalance>this.propertyValue) {
+            return true;
+        }
+        return false;
+    }
+    /**
+     * Returns the name of the property for this property object.
+     * @return Returns the Property name for this property object.
+     */
+    public String getPropertyName() {
+        return this.propertyName;
+    }
+}

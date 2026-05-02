@@ -50,19 +50,22 @@ public class GameManager {
      * The method for cycling through the players for their turn.
      * @param gameTurns gives in the number of turns the game has to run for.
      * @param gameBoard Passes in the game board object.
+     * @param boardMap Passes in the game bourd.
      */
-    public void playerTurnSystem(final int gameTurns,final Board gameBoard) {
+    public void playerTurnSystem(final int gameTurns,final Board gameBoard,final HashMap<Integer, SpaceSquare> boardMap) {
         int count = 1;
         while(count <= gameTurns){
             for(Player currentPlayer : players.values()) {
                 System.out.println("The current player is Player " + currentPlayer.getPlayerNumber());
                 currentDiceTotal = currentPlayer.rollDice();
                 gameBoard.setNewPlayerPosition(currentPlayer, currentDiceTotal);
+                System.out.println(currentPlayer.getPosition());
+                System.out.println(currentPlayer.getPlayerBalance());
+                gameBoard.landedOn(boardMap, currentPlayer);
                 System.out.println(currentPlayer.getPlayerBalance());
             }
             count++;
         }
-        determineWinner(players);
     }
     /**
      * Takes in the hashmap of the player objects and goes through each object to find the highest
@@ -96,7 +99,9 @@ public class GameManager {
         GameManager gameManager = new GameManager();
         UserInputManager userInputManager = new UserInputManager();
         Board board = new Board(userInputManager.returncontextValidatedUserDesiredBoardSize());
+        HashMap<Integer, SpaceSquare> boardMap = board.initiateBoard();
+        boardMap = board.addPropertiesTOBoard(boardMap,board.calculateTheAmountOfProperties());
         HashMap<Integer,Player> players = gameManager.createPlayers(userInputManager.returnContextValidatedUserPlayerCountNumber());
-        gameManager.playerTurnSystem(gameManager.numOfTurnsToEnd, board);
+        gameManager.playerTurnSystem(gameManager.numOfTurnsToEnd, board, boardMap);
     }
 }

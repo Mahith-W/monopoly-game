@@ -1,10 +1,12 @@
 package com.cm6123.monopoly;
 
-import com.cm6123.monopoly.game.Board;
-import com.cm6123.monopoly.game.Player;
+import com.cm6123.monopoly.game.*;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 public class BoardChecks {
 
@@ -17,7 +19,7 @@ public class BoardChecks {
     }
 
     @Test
-    public void WhenYouMakeAABoardOfSizeTenTheSizeOfTheHashMapHasToBeTen() {
+    public void WhenYouMakeABoardOfSizeTenTheSizeOfTheHashMapHasToBeTen() {
         Board board = new Board(10);
         board.initiateBoard();
         assertEquals(10,board.getBoardMap().size());
@@ -32,5 +34,27 @@ public class BoardChecks {
         board.setNewPlayerPosition(player, 10);
 
         assertEquals(1200.00F, player.getPlayerBalance());
+    }
+
+    @Test
+    public void WhenTheBoardSizeIsTenItShouldHaveSixProperties() {
+        Board board = new Board(10);
+        int numOfProperties = board.calculateTheAmountOfProperties();
+        assertEquals(6,numOfProperties);
+    }
+
+    @Test
+    public void WhenTheBoardSizeIsTenItShouldHaveSixPropertiesInTheHashMap() {
+        Board board = new Board(10);
+        HashMap<Integer, SpaceSquare> hashBoard = board.initiateBoard();
+        int numOfProperties = board.calculateTheAmountOfProperties();
+        board.addPropertiesTOBoard(hashBoard,numOfProperties);
+        int count = 0;
+        for (SpaceSquare spaceSquare : hashBoard.values()) {
+            if (spaceSquare instanceof Property){
+                count++;
+            }
+        }
+        assertEquals(6,count);
     }
 }
