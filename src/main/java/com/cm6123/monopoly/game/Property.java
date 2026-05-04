@@ -64,12 +64,13 @@ public class Property extends SpaceSquare{
      * @param purchasingPlayer
      */
     public void playerBuysProperty(final Player purchasingPlayer) {
-        if (this.owner == null){ // REMOVE THIS WHEN YOU ADD RENTALS.
+        if (this.owner == null){
             if (playerCanBuyProperty(purchasingPlayer.getPlayerBalance())) {
                 float playerBalance = purchasingPlayer.getPlayerBalance();
                 purchasingPlayer.subBalance(propertyValue);
                 setOwner(purchasingPlayer);
                 System.out.println("Player "+purchasingPlayer.getPlayerNumber()+" has bought " +propertyName);
+                purchasingPlayer.addOwnedProperty(this);
             }else{
                 System.out.println("Player "+purchasingPlayer.getPlayerNumber()+" don't have enough balance");
             }
@@ -99,9 +100,57 @@ public class Property extends SpaceSquare{
      * Carries Out the rental Payment. Takes money away from the current player if they are not the owner and pays that money to the
      * owner.
      * @param currentPlayer Passes in the current player value.
+     * @return True if the rental was successfully paid otherwise False which probably results in the player being marked
+     * as bankrupt.
      */
-    public void carryOutRental(final Player currentPlayer) {
+    public boolean carryOutRental(final Player currentPlayer) {
+        boolean paymentSuccessful = false;
+        if(this.rentalPrice < currentPlayer.getPlayerBalance()){
+            return playerPaidWithJustBalance(currentPlayer);
+        } else if (this.rentalPrice > currentPlayer.getPlayerBalance() && !currentPlayer.getOwnedProperties().isEmpty()) {
+            while(!currentPlayer.getOwnedProperties().isEmpty() && this.rentalPrice>currentPlayer.getPlayerBalance()){
+                currentPlayer.addBalance(currentPlayer.getLowestValueProperty().getValue().getValueOfProperty()*0.5F);
+            }
+            if(this.rentalPrice < currentPlayer.getPlayerBalance()){
+                return playerPaidUsingProperties(currentPlayer);
+            }
+        } else if (this.rentalPrice > currentPlayer.getPlayerBalance() && currentPlayer.getPlayerBalance() > 0) {
+            return playerPaidAllBalance(currentPlayer);
+        }
+        System.out.println("Player "+currentPlayer.getPlayerNumber()+" is bankrupt and is out of the game!");
+        currentPlayer.setAsBankrupt();
+        return paymentSuccessful;
+    }
+
+    private boolean playerPaidWithJustBalance(final Player currentPlayer) {
+        boolean paymentSuccessful;
         currentPlayer.subBalance(this.rentalPrice);
         this.owner.addBalance(this.rentalPrice);
+        paymentSuccessful = true;
+        System.out.println("Player "+ currentPlayer.getPlayerNumber()+" has paid the rent!");
+        return paymentSuccessful;
+    }
+
+    private boolean playerPaidAllBalance(final Player currentPlayer) {
+        boolean paymentSuccessful;
+        this.owner.addBalance(currentPlayer.getPlayerBalance());
+        currentPlayer.subBalance(currentPlayer.getPlayerBalance());
+        paymentSuccessful = true;
+        System.out.println("Player "+ currentPlayer.getPlayerNumber()+" has paid the rent by paying everything they have!");
+        return paymentSuccessful;
+    }
+
+    private boolean playerPaidUsingProperties(final Player currentPlayer) {
+        boolean paymentSuccessful;
+        currentPlayer.subBalance(this.rentalPrice);
+        this.owner.addBalance(this.rentalPrice);
+        paymentSuccessful = true;
+        currentPlayer.getLowestValueProperty().getValue().unOwnershipProperty();
+        currentPlayer.getOwnedProperties().remove(currentPlayer.getLowestValueProperty().getKey());
+        System.out.println("Player "+ currentPlayer.getPlayerNumber()+" has paid the rent by selling their property(s)!");
+        return paymentSuccessful;
+    }
+    private void unOwnershipProperty(){
+        this.owner =  null;
     }
 }

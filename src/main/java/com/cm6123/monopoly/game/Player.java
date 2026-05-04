@@ -2,6 +2,9 @@ package com.cm6123.monopoly.game;
 
 import com.cm6123.monopoly.dice.Dice;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Player {
     /**
      * Holds the player number for each player.
@@ -15,6 +18,14 @@ public class Player {
      * Holds the current position of the player.
      */
     private int playerPosition;
+    /**
+     * Holds a hashmap of the list of owned property objects of the current player.
+     */
+    private HashMap<Integer, Property> ownedProperties = new HashMap<>();
+    /**
+     * False if the player object is bankrupt or True if the player is bankrupt.
+     */
+    private boolean bankRupt = false;
     /**
      * Constructor for the player class.
      * @param currentPlayerNumber Holds the current player number to assign to the creating player
@@ -76,5 +87,65 @@ public class Player {
      */
     public void subBalance(final float subMoneyAmount){
         this.balance = balance - subMoneyAmount;
+    }
+    /**
+     * Returns the hashmap containing the currently owned properties by this player object.
+     * @return Returns the hashmap that contains owned properties by this player object.
+     */
+    public HashMap<Integer, Property> getOwnedProperties() {
+        return this.ownedProperties;
+    }
+    /**
+     * Adds a passed in Property object to the ownedProperties hashmap.
+     * @param purchasingPropertyObject
+     */
+    public void addOwnedProperty(final Property purchasingPropertyObject) {
+        if(this.ownedProperties.isEmpty()){
+            ownedProperties.put(1,purchasingPropertyObject);
+        }else{
+            ownedProperties.put(ownedProperties.size()+1,purchasingPropertyObject);
+        }
+    }
+    /**
+     * Returns true if the player is bankrupt otherwise it returns false.
+     * @return True if the player is bankrupt or False if the player is not bankrupt.
+     */
+    public boolean isBankrupt() {
+        return bankRupt;
+    }
+    /**
+     * Finds the lowest value property from the hashmap of stored properties and goes through each item.
+     * @return The lowest value property the player owns.
+     */
+    public Map.Entry<Integer, Property> getLowestValueProperty() {
+        Map.Entry<Integer,Property> lowestValue = null;
+        for(Map.Entry<Integer, Property> entry : ownedProperties.entrySet()){
+            if(lowestValue == null || entry.getValue().getValueOfProperty() < lowestValue.getValue().getValueOfProperty()){
+                lowestValue = entry;
+            }
+        }
+        return lowestValue;
+    }
+    /**
+     * Sets the current player object as bankrupt, and they are out of the game.
+     */
+    public void setAsBankrupt() {
+        this.bankRupt = true;
+    }
+    /**
+     * Calculates the 1% of all rental price of all owned properties of the player. This is added to the 200 in the
+     * Board class.
+     * @return 1% of all owned property rental prices.
+     */
+    public float calculate1PercentOfRentalPrice() {
+        float percentOfRentalPrice = 0;
+        if(!ownedProperties.isEmpty()){
+            for(Property property : ownedProperties.values()){
+                percentOfRentalPrice += property.getRentalPrice()*0.01F;
+            }
+        }else {
+            return percentOfRentalPrice;
+        }
+        return percentOfRentalPrice;
     }
 }

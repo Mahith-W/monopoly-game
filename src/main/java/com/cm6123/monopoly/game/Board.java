@@ -52,7 +52,7 @@ public class Board {
         int newPosition;
         if (currentPlayer.getPosition()+totalDiceNumber > size){
             newPosition = (currentPlayer.getPosition()+totalDiceNumber)-size;
-            currentPlayer.addBalance(200.00F);
+            currentPlayer.addBalance(200.00F + currentPlayer.calculate1PercentOfRentalPrice());
         }else{
             newPosition = currentPlayer.getPosition()+totalDiceNumber;
         }

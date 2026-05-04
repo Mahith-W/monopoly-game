@@ -1,10 +1,11 @@
 package com.cm6123.monopoly;
 
-import com.cm6123.monopoly.game.Board;
-import com.cm6123.monopoly.game.Player;
+import com.cm6123.monopoly.game.*;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.HashMap;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerChecks {
 
@@ -67,6 +68,88 @@ public class PlayerChecks {
         p1.subBalance(300.00F);
 
         assertEquals(700.00F,p1.getPlayerBalance());
+    }
+
+    @Test
+    public void WhenAPlayerObjectIsCreatedThatPlayerShouldHaveNoPropertiesOwned() {
+        GameManager gameManager = new GameManager();
+        gameManager.createPlayers(1);
+
+        assertTrue(gameManager.getPlayers().get(1).getOwnedProperties().isEmpty());
+    }
+
+    @Test
+    public void WhenAPlayerBuysAPropertyItHasToBeAddedToTheOwnedProperties() {
+        GameManager gameManager = new GameManager();
+        Board board = new Board(10);
+        HashMap<Integer, SpaceSquare> boardMap = board.initiateBoard();
+        Property property = new Property(3,300.00F,30.00F,"May Fair");
+        boardMap.put(3,property);
+
+        gameManager.createPlayers(1);
+        gameManager.getPlayers().get(1).setPosition(3);
+
+        property.playerBuysProperty(gameManager.getPlayers().get(1));
+
+        assertEquals(700.00F,gameManager.getPlayers().get(1).getPlayerBalance());
+        assertEquals(1, gameManager.getPlayers().get(1).getOwnedProperties().size());
+        assertEquals(property,gameManager.getPlayers().get(1).getOwnedProperties().get(1));
+    }
+
+    @Test
+    public void WhenAPlayerBuysTwoPropertiesBothOfThosePropertiesShouldBeAddedToTheOwnedProperties() {
+        GameManager gameManager = new GameManager();
+        Board board = new Board(10);
+        HashMap<Integer, SpaceSquare> boardMap = board.initiateBoard();
+        Property property1 = new Property(3,300.00F,30.00F,"May Fair");
+        Property property2 = new Property(4,300.00F,30.00F,"Fair May");
+
+        boardMap.put(3,property1);
+        boardMap.put(4,property2);
+
+        gameManager.createPlayers(1);
+        gameManager.getPlayers().get(1).setPosition(3);
+
+        property1.playerBuysProperty(gameManager.getPlayers().get(1));
+        gameManager.getPlayers().get(1).setPosition(4);
+        property2.playerBuysProperty(gameManager.getPlayers().get(1));
+
+        assertEquals(400.00F,gameManager.getPlayers().get(1).getPlayerBalance());
+        assertEquals(2, gameManager.getPlayers().get(1).getOwnedProperties().size());
+        assertEquals(property1,gameManager.getPlayers().get(1).getOwnedProperties().get(1));
+        assertEquals(property2,gameManager.getPlayers().get(1).getOwnedProperties().get(2));
+    }
+
+    @Test
+    public void WhenAPlayerObjectIsCreatedItShouldNotBeBankrupt() {
+        GameManager gameManager = new GameManager();
+        gameManager.createPlayers(1);
+
+        assertFalse(gameManager.getPlayers().get(1).isBankrupt());
+    }
+
+    @Test
+    public void WhenAPlayerWantsToSellTheirPropetiesToPayRentTheLowestValuePropertiesShouldBeChosen (){
+        GameManager gameManager = new GameManager();
+        gameManager.createPlayers(1);
+        Board board = new Board(10);
+        HashMap<Integer, SpaceSquare> boardMap = board.initiateBoard();
+        gameManager.getPlayers().get(1).addBalance(1000.00F);
+
+        Property property = new Property(3,300.00F,30.00F,"May Fair");
+        Property property2 = new Property(4,400.00F,40.00F,"Fair May");
+        Property property3 = new Property(5,500.00F,50.00F,"June Fair");
+
+        boardMap.put(3,property); //Lowest Value Property
+        boardMap.put(4,property2);
+        boardMap.put(5,property3);
+
+        // The lines are in different order so we can prove it will return the lowest value property.
+        property3.playerBuysProperty(gameManager.getPlayers().get(1));
+        property2.playerBuysProperty(gameManager.getPlayers().get(1));
+        property.playerBuysProperty(gameManager.getPlayers().get(1));
+
+        assertEquals(property,gameManager.getPlayers().get(1).getLowestValueProperty().getValue());
     }
 }
 

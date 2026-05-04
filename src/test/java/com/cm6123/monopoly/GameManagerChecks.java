@@ -63,4 +63,38 @@ public class GameManagerChecks {
         verify(players.get(1), times(1)).rollDice();
         verify(players.get(2), times(1)).rollDice();
     }
+
+    @Test
+    public void WhenAPlayerIsBankruptTheirTurnIsSkipped() {
+        GameManager gameManager = new GameManager();
+        HashMap<Integer,Player> players= gameManager.createPlayers(3);
+        players.clear();
+        Board board = mock(Board.class);
+        HashMap<Integer,SpaceSquare> boardMap = board.initiateBoard();
+        Property property = new Property(2,300.00F,30.00F,"May Fair");
+        boardMap.put(2,property);
+
+        Player player1 = mock(Player.class);
+        Player player2 = mock(Player.class);
+        Player player3 = mock(Player.class);
+        players.put(1, player1);
+        players.put(2, player2);
+        players.put(3, player3);
+
+        when(players.get(1).rollDice()).thenReturn(3);
+        when(players.get(2).rollDice()).thenReturn(2);
+        when(players.get(3).rollDice()).thenReturn(3);
+        when(player2.isBankrupt()).thenReturn(true);
+        property.playerBuysProperty(player1);
+        player2.subBalance(1000.00F);
+
+        property.carryOutRental(player2);
+        property.carryOutRental(player3);
+
+        gameManager.playerTurnSystem(3,board,boardMap);
+
+        verify(gameManager.getPlayers().get(1), times(3)).rollDice();
+        verify(gameManager.getPlayers().get(2), times(0)).rollDice();
+        verify(gameManager.getPlayers().get(3), times(3)).rollDice();
+    }
 }

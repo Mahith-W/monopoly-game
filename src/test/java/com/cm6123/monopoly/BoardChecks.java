@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 
 public class BoardChecks {
 
@@ -27,13 +26,61 @@ public class BoardChecks {
     }
 
     @Test
-    public void WhenThePlayerPassesTheHomeSquareTheBalanceIsIncreasedBy200() {
+    public void WhenThePlayerPassesTheHomeSquareTheBalanceIsIncreasedBy200IfTheyOwnNoProperties() {
         Player player = new Player(1);
         Board board = new Board(10);
         board.initiateBoard();
         board.setNewPlayerPosition(player, 10);
 
         assertEquals(1200.00F, player.getPlayerBalance());
+    }
+
+    @Test
+    public void WhenThePlayerPassesTheHomeSquareTheBalanceIsIncreasedBy200Plus1PercentOfRentalsIfTheyOwnOneProperty() {
+        Player player = new Player(1);
+        Board board = new Board(10);
+        HashMap<Integer,SpaceSquare> gameBoard = board.initiateBoard();
+        Property property = new Property(3,300.00F,30.00F,"May Fair");
+        gameBoard.put(3, property);
+        player.setPosition(3);
+
+        property.playerBuysProperty(player);
+        board.setNewPlayerPosition(player, 10);
+
+        assertEquals(900.30F, player.getPlayerBalance());
+
+    }
+
+    @Test
+    public void WhenThePlayerPassesTheHomeSquareTheBalanceIsIncreasedBy200Plus1PercentOfRentalsIfTheyOwnTwoProperties() {
+        Player player = new Player(1);
+        Board board = new Board(10);
+        HashMap<Integer,SpaceSquare> gameBoard = board.initiateBoard();
+        Property property = new Property(3,300.00F,30.00F,"May Fair");
+        Property property2 = new Property(4,300.00F,30.00F,"Fair May");
+        gameBoard.put(3, property);
+        gameBoard.put(4, property2);
+        player.setPosition(3);
+        property.playerBuysProperty(player);
+        player.setPosition(4);
+        property2.playerBuysProperty(player);
+
+        board.setNewPlayerPosition(player, 10);
+
+        assertEquals(600.60F, player.getPlayerBalance());
+
+    }
+
+    @Test
+    public void WhenAPlayerIsOnThe14thSquareOfA16SquareBoardAndTheDiceRolls4TheirNewPositionShouldBe2 () {
+        Player player = new Player(1);
+        Board board = new Board(16);
+        HashMap<Integer, SpaceSquare> gameBoard = board.initiateBoard();
+        player.setPosition(14);
+        board.setNewPlayerPosition(player, 4);
+
+        assertEquals(2,player.getPosition());
+
     }
 
     @Test

@@ -57,12 +57,14 @@ public class GameManager {
         while(count <= gameTurns){
             for(Player currentPlayer : players.values()) {
                 System.out.println("The current player is Player " + currentPlayer.getPlayerNumber());
-                currentDiceTotal = currentPlayer.rollDice();
-                gameBoard.setNewPlayerPosition(currentPlayer, currentDiceTotal);
-                System.out.println(currentPlayer.getPosition());
-                System.out.println(currentPlayer.getPlayerBalance());
-                gameBoard.landedOn(boardMap, currentPlayer);
-                System.out.println(currentPlayer.getPlayerBalance());
+                if(!currentPlayer.isBankrupt()) {
+                    currentDiceTotal = currentPlayer.rollDice();
+                    gameBoard.setNewPlayerPosition(currentPlayer, currentDiceTotal);
+                    System.out.println(currentPlayer.getPosition());
+                    System.out.println(currentPlayer.getPlayerBalance());
+                    gameBoard.landedOn(boardMap, currentPlayer);
+                    System.out.println(currentPlayer.getPlayerBalance());
+                }
             }
             count++;
         }
