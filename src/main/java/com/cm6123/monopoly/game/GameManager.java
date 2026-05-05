@@ -54,8 +54,8 @@ public class GameManager {
      */
     public void playerTurnSystem(final int gameTurns,final Board gameBoard,final HashMap<Integer, SpaceSquare> boardMap) {
         int count = 1;
-        System.out.println("=============ROUND 1=============");
         while(count <= gameTurns){
+            System.out.println("=============ROUND "+count+"=============");
             for(Player currentPlayer : players.values()) {
                 System.out.println("The current player is Player " + currentPlayer.getPlayerNumber());
                 if(!currentPlayer.isBankrupt()) {
@@ -67,7 +67,6 @@ public class GameManager {
                 }
             }
             count++;
-            System.out.println("=============ROUND "+count+"=============");
         }
     }
 
@@ -104,13 +103,19 @@ public class GameManager {
         System.out.println("The winner is Player " + winner.getPlayerNumber()+" with $" + winner.getPlayerBalance());
         return winner;
     }
-    /**
-     * Creates the board object.
-     * @param sizeOfBoard Passes in the userDesired size of the board.
-     */
-    public void boardCreation(final int sizeOfBoard){
-        Board board = new Board(sizeOfBoard);
-    }
+//    /**
+//     * Adds the special squares to the boardMap containing just the Home Square and Roads.
+//     * @param boardMap passes in the initialised board with just the Home square and Roads.
+//     * @param boardClass passes in an object of the Board class.
+//     * @return The completed Board containng the special squares.
+//     */
+//    public HashMap<Integer, SpaceSquare> setUpSpecialSquares(final HashMap<Integer, SpaceSquare> boardMap,final Board boardClass) {
+//        HashMap<Integer, SpaceSquare> mapWHomeARoads = boardMap;
+//        mapWHomeARoads = boardClass.addPropertiesTOBoard(boardMap, boardClass.calculateTheAmountOfProperties());
+//        mapWHomeARoads = boardClass.addCycleSquare(boardMap,boardClass.calculateTheAmountOfProperties());
+//        mapWHomeARoads = boardClass.addUnderGroundStation(boardMap,3);
+//        return mapWHomeARoads;
+//    }
     /**
      * The main method.
      * @param args
@@ -122,6 +127,7 @@ public class GameManager {
         HashMap<Integer, SpaceSquare> boardMap = board.initiateBoard();
         boardMap = board.addPropertiesTOBoard(boardMap,board.calculateTheAmountOfProperties());
         boardMap = board.addCycleSquare(boardMap,board.calculateAmountOfCycleSquares());
+        boardMap = board.addUnderGroundStation(boardMap,3);
         HashMap<Integer,Player> players = gameManager.createPlayers(userInputManager.returnContextValidatedUserPlayerCountNumber());
         gameManager.playerTurnSystem(gameManager.numOfTurnsToEnd, board, boardMap);
         gameManager.determineWinner(gameManager.players);

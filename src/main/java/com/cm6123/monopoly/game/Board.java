@@ -65,8 +65,13 @@ public class Board {
      * Calculates the amount of properties that is porpotional to the size of the board.
      * @return The number of properties we need to include in the board.
      */
-    public int calculateTheAmountOfProperties(){
-        int amountOfProperties = Math.toIntExact(Math.round(size * 0.6));
+    public int calculateTheAmountOfProperties() {
+        int amountOfProperties;
+        if (boardMap.size() <= 11) { // Done this because 3 Underground stations are a requirement and we can't fit 3 on board sizes 10 and 11.
+            return 5;
+        } else {
+            amountOfProperties = Math.toIntExact(Math.round(size * 0.6));
+        }
         return amountOfProperties;
     }
     /**
@@ -89,11 +94,11 @@ public class Board {
                     mapWHomeAndRoad.put(propertyPosition, new Property(propertyPosition, 300.00F, 30.00F, scanner.nextLine()));
                     counter++;
                 }
-                propertyPosition = rand.nextInt(max - min + 1) + min;
             }
         }catch (final FileNotFoundException e){
             System.out.println("File not found");
         }
+        System.out.println("Properties Added Successfully!");
         return mapWHomeAndRoad;
     }
     /**
@@ -115,6 +120,9 @@ public class Board {
         } else if (mapWHomeRoadCircle.get(currentPlayer.getPosition()) instanceof CycleRace) {
             System.out.println("You landed on Cycle Space and the Road is CLOSED, roll 1,2 or 3 to continue!");
             currentPlayer.setAsOnACycleSquareStatus(true);
+        } else if (mapWHomeRoadCircle.get(currentPlayer.getPosition()) instanceof UndergroundStation) {
+            System.out.println("You landed at an Underground station!");
+            transferPlayerFromStationToStation(findPositionsOfUndergroundStations(mapWHomeRoadCircle),currentPlayer,mapWHomeRoadCircle);
         }
     }
     /**
@@ -144,8 +152,74 @@ public class Board {
                 mapWHomeRoadAndProperty.put(cyclePosition,new CycleRace(cyclePosition));
                 counter++;
             }
-            cyclePosition = rand.nextInt(max - min + 1) + min;
         }
+        System.out.println("CycleSquares added successfully");
         return mapWHomeRoadAndProperty;
+    }
+    /**
+     * Adds the underground stations to the board.
+     * @param mapWHomeRoadAndProperty
+     * @param amountOfUnderGroundStations
+     * @return The new updated board map containing the underground stations.
+     */
+    public HashMap<Integer, SpaceSquare> addUnderGroundStation(final HashMap<Integer,SpaceSquare> mapWHomeRoadAndProperty, final int amountOfUnderGroundStations) {
+        if(amountOfUnderGroundStations <=1){
+            System.out.println("The board won't contain any underground stations (need a minimum of 2)");
+            return mapWHomeRoadAndProperty;
+        }else {
+            int max = mapWHomeRoadAndProperty.size();
+            int min = 2;
+            Random rand = new Random();
+            int counter = 0;
+            while (counter < amountOfUnderGroundStations) {
+                int underGroundStation = rand.nextInt(max - min + 1) + min;
+                if (mapWHomeRoadAndProperty.get(underGroundStation) instanceof Road) {
+                    mapWHomeRoadAndProperty.put(underGroundStation, new UndergroundStation(underGroundStation));
+                    counter++;
+                }
+            }
+            System.out.println("UndergroundStations added successfully");
+            return mapWHomeRoadAndProperty;
+        }
+    }
+    /**
+     * Finds all the positions of the Underground stations and returns it.
+     * @param mapWHomeRoadAndProperty The HashMap of the positions of the Underground stations.
+     * @return A hashmap containing the Underground station's position.
+     */
+    public HashMap<SpaceSquare, Integer> findPositionsOfUndergroundStations(final HashMap<Integer,SpaceSquare> mapWHomeRoadAndProperty){
+        HashMap<SpaceSquare, Integer> positionsOfStations = new HashMap<>();
+        int count = 1;
+        for(SpaceSquare spaceSquare : mapWHomeRoadAndProperty.values()){
+            if(spaceSquare instanceof UndergroundStation){
+                positionsOfStations.put(spaceSquare,spaceSquare.getPositionOfSquare());
+                count++;
+            }
+        }
+        return positionsOfStations;
+    }
+    /**
+     * This function is used to transfer the player from one station to the chosen other.
+     * I used this code snippet:- https://www.baeldung.com/java-hashmap-random-key-value-entry#:~:text=Getting%20a%20Random%20Entry,to%20retrieve%20the%20corresponding%20value.
+     * (Specifically the 3.1 using array) in this function.
+     * @param positionsOfStations
+     * @param currentPlayer
+     * @param mapWHomeRoadAndProperty
+     */
+    public void transferPlayerFromStationToStation(final HashMap<SpaceSquare, Integer> positionsOfStations,final Player currentPlayer,final HashMap<Integer,SpaceSquare> mapWHomeRoadAndProperty) {
+        SpaceSquare currentStation = mapWHomeRoadAndProperty.get(currentPlayer.getPosition());
+        SpaceSquare[] listOfstations = positionsOfStations.keySet().toArray(new SpaceSquare[0]);
+        Random rand = new Random();
+        SpaceSquare destination;
+        do {
+            destination = listOfstations[rand.nextInt(listOfstations.length)];
+        }
+        while (destination.equals(currentStation));
+        currentPlayer.setPosition(positionsOfStations.get(destination));
+        System.out.println("You have been transfered to the station at position "+currentPlayer.getPosition());
+        if((positionsOfStations.get(destination)-positionsOfStations.get(currentStation)) < 0){
+            float passingHomeMoney = 200.00F + currentPlayer.calculate1PercentOfRentalPrice();
+            System.out.println("You have passed home while taking the underground and recieve $"+passingHomeMoney);
+        }
     }
 }
