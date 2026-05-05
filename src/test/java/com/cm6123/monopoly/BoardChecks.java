@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 public class BoardChecks {
 
@@ -137,4 +138,76 @@ public class BoardChecks {
 
         assertEquals(700.00F, player1.getPlayerBalance());
     }
+
+    @Test
+    public void WhenABoardWithTheSizeOf10IsCreatedThenTheCalculatedNumberOfCycleSquaresIsOne () {
+        Board board = new Board(10);
+        int numOfCycleRace = board.calculateAmountOfCycleSquares();
+
+        assertEquals(1,numOfCycleRace);
+    }
+
+    @Test
+    public void WhenABoardWithTheSizeOf50IsCreatedThenTheCalculatedNumberOfCycleSquaresIsFive () {
+        Board board = new Board(50);
+        int numOfCycleRace = board.calculateAmountOfCycleSquares();
+
+        assertEquals(5,numOfCycleRace);
+    }
+
+    @Test
+    public void WhenABoardWithTheSizeOf10TheNumberOfCycleSquaresCreatedOnTheBoardShouldBeOne () {
+        Board board = new Board(10);
+        int numOfCycleRace = board.calculateAmountOfCycleSquares();
+        HashMap<Integer,SpaceSquare> gameBoard = board.initiateBoard();
+        gameBoard = board.addPropertiesTOBoard(gameBoard,1);
+
+        gameBoard = board.addCycleSquare(gameBoard,numOfCycleRace);
+
+        int count = 0;
+
+        for (SpaceSquare spaceSquare : gameBoard.values()) {
+            if (spaceSquare instanceof CycleRace){
+                count++;
+            }
+        }
+
+        assertEquals(1,count);
+    }
+
+    @Test
+    public void WhenABoardWithTheSizeOf50TheNumberOfCycleSquaresCreatedOnTheBoardShouldBeFive () {
+        Board board = new Board(50);
+        int numOfCycleRace = board.calculateAmountOfCycleSquares();
+        HashMap<Integer,SpaceSquare> gameBoard = board.initiateBoard();
+        gameBoard = board.addPropertiesTOBoard(gameBoard,1);
+        gameBoard = board.addCycleSquare(gameBoard,numOfCycleRace);
+
+        int count = 0;
+
+        for (SpaceSquare spaceSquare : gameBoard.values()) {
+            if (spaceSquare instanceof CycleRace){
+                count++;
+            }
+        }
+
+        assertEquals(5,count);
+    }
+
+    @Test
+    public void WhenAPlayerHasLandedOnTheCycleRaceSquaresetAsOnACycleSquareStatusFunctionShouldBeTriggered() {
+        Player player1 = mock(Player.class);
+
+        Board board = new Board(10);
+        HashMap<Integer, SpaceSquare> hashBoard = board.initiateBoard();
+        CycleRace cycleRace = new CycleRace(3);
+        hashBoard.put(3,cycleRace);
+
+        when(player1.getPosition()).thenReturn(3);
+
+        board.landedOn(hashBoard,player1);
+
+        verify(player1,times(1)).setAsOnACycleSquareStatus(true);
+    }
+
 }

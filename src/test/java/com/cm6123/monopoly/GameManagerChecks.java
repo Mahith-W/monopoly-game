@@ -97,4 +97,63 @@ public class GameManagerChecks {
         verify(gameManager.getPlayers().get(2), times(0)).rollDice();
         verify(gameManager.getPlayers().get(3), times(3)).rollDice();
     }
+
+    @Test
+    public void WhenAPlayerHasNotLandedOnACircleSquareTheyShouldNotBeRollingTheCircleDieItShouldBeTheDefault2Dice() {
+        GameManager gameManager = new GameManager();
+        HashMap<Integer,Player> players= gameManager.createPlayers(1);
+        Player player1 = mock(Player.class);
+        players.put(1, player1);
+
+        Board board = mock(Board.class);
+        HashMap<Integer,SpaceSquare> boardMap = board.initiateBoard();
+
+        gameManager.playerTurnSystem(1,board,boardMap);
+
+        verify(player1, times(1)).rollDice();
+        verify(player1, times(0)).rollDiceForCycleRace();
+    }
+
+    @Test
+    public void WhenAPlayerHasLandedOnACircleSquareTheyShouldNotBeRollingTheNormalDiceItShouldBeTheCircleDie() {
+        GameManager gameManager = new GameManager();
+        HashMap<Integer,Player> players= gameManager.createPlayers(1);
+        Player player1 = mock(Player.class);
+        players.put(1, player1);
+
+        Board board = mock(Board.class);
+        HashMap<Integer,SpaceSquare> boardMap = board.initiateBoard();
+        player1.setAsOnACycleSquareStatus(true);
+        when(player1.isOnACycleSquare()).thenReturn(true);
+
+        gameManager.playerTurnSystem(1,board,boardMap);
+
+        verify(player1, times(0)).rollDice();
+        verify(player1, times(1)).rollDiceForCycleRace();
+
+    }
+
+    @Test
+    public void WhenAPlayerHasLandedOnACircleSquareAndTheyRollANumberLessThanOrEqualTo3TheyShouldMoveOutOfTheCircleSpaceAndMoveTheNumberOfSpaces() {
+        GameManager gameManager = new GameManager();
+        HashMap<Integer,Player> players= gameManager.createPlayers(1);
+        Player player1 = mock(Player.class);
+        players.put(1, player1);
+
+        Board board = mock(Board.class);
+        HashMap<Integer,SpaceSquare> boardMap = board.initiateBoard();
+
+        when(player1.isOnACycleSquare()).thenReturn(true);
+        when(player1.getPosition()).thenReturn(3);
+        when(player1.rollDiceForCycleRace()).thenReturn(3);
+        gameManager.playerTurnSystem(1,board,boardMap);
+
+        when(player1.isOnACycleSquare()).thenReturn(false);
+        when(player1.getPosition()).thenReturn(6);
+        gameManager.playerTurnSystem(1,board,boardMap);
+
+        verify(player1, times(1)).rollDice();
+        verify(player1, times(1)).rollDiceForCycleRace();
+    }
+
 }

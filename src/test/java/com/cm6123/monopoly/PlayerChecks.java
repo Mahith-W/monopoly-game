@@ -1,11 +1,13 @@
 package com.cm6123.monopoly;
 
+import com.cm6123.monopoly.dice.Dice;
 import com.cm6123.monopoly.game.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public class PlayerChecks {
 
@@ -150,6 +152,76 @@ public class PlayerChecks {
         property.playerBuysProperty(gameManager.getPlayers().get(1));
 
         assertEquals(property,gameManager.getPlayers().get(1).getLowestValueProperty().getValue());
+    }
+
+    @Test
+    public void AtTheStartOfTheGameAllPlayersAreNotOnACycleSquareSocurrentlyOnCycleSquareShouldBeFalse() {
+        GameManager gameManager = new GameManager();
+        gameManager.createPlayers(4);
+
+        for(Player player : gameManager.getPlayers().values()){
+            assertFalse(player.isOnACycleSquare());
+        }
+    }
+
+    @Test
+    public void WhenAPlayerIsSetAsOnACycleSquareSocurrentlyOnCycleSquareShouldBeTrue() {
+        GameManager gameManager = new GameManager();
+        gameManager.createPlayers(1);
+
+        gameManager.getPlayers().get(1).setAsOnACycleSquareStatus(true);
+
+        assertTrue(gameManager.getPlayers().get(1).isOnACycleSquare());
+    }
+
+    @Test
+    public void WhenAPlayerIsOnACycleSquareAndTheyRollAOneTheyShouldNoLongerBeClassedAsOnACycleSquare() {
+        Player player = mock(Player.class);
+
+        player.setPosition(3);
+        player.setAsOnACycleSquareStatus(true);
+
+        when(player.rollDiceForCycleRace()).thenReturn(1);
+
+        assertFalse(player.isOnACycleSquare());
+    }
+
+    @Test
+    public void WhenAPlayerIsOnACycleSquareAndTheyRollAThreeTheyShouldNoLongerBeClassedAsOnACycleSquare() {
+        Player player = mock(Player.class);
+
+        player.setPosition(3);
+        player.setAsOnACycleSquareStatus(true);
+        when(player.rollDiceForCycleRace()).thenReturn(3);
+
+        assertFalse(player.isOnACycleSquare());
+    }
+
+    @Test
+    public void WhenAPlayerIsOnACycleSquareAndTheyRollAFourTheyShouldBeStillClassedAsOnACycleSquare() { // should also return 0 because
+        Player player = spy(new Player(1));                                            // the plan is to use the number to move the player
+        Dice cycleDice = mock(Dice.class);                                                              // using setNewPlayerPosition() in Board class.
+
+        when(cycleDice.roll()).thenReturn(4);
+        doReturn(cycleDice).when(player).accessCycleDie();
+
+        player.setAsOnACycleSquareStatus(true);
+
+        assertTrue(player.isOnACycleSquare());
+
+    }
+
+    @Test
+    public void WhenAPlayerIsOnACycleSquareAndTheyRollASixTheyShouldBeStillClassedAsOnACycleSquare() {
+        Player player = spy(new Player(1));
+        Dice cycleDice = mock(Dice.class);
+
+        when(cycleDice.roll()).thenReturn(4);
+        doReturn(cycleDice).when(player).accessCycleDie();
+
+        player.setAsOnACycleSquareStatus(true);
+
+        assertTrue(player.isOnACycleSquare());
     }
 }
 

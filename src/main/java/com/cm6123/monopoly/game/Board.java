@@ -52,11 +52,14 @@ public class Board {
         int newPosition;
         if (currentPlayer.getPosition()+totalDiceNumber > size){
             newPosition = (currentPlayer.getPosition()+totalDiceNumber)-size;
-            currentPlayer.addBalance(200.00F + currentPlayer.calculate1PercentOfRentalPrice());
+            float passingHomeMoney = 200.00F + currentPlayer.calculate1PercentOfRentalPrice();
+            System.out.println("You passed home and recieved $"+passingHomeMoney);
+            currentPlayer.addBalance(passingHomeMoney);
         }else{
             newPosition = currentPlayer.getPosition()+totalDiceNumber;
         }
         currentPlayer.setPosition(newPosition);
+        System.out.println("Player "+currentPlayer.getPlayerNumber()+" is now at position "+currentPlayer.getPosition());
     }
     /**
      * Calculates the amount of properties that is porpotional to the size of the board.
@@ -95,17 +98,54 @@ public class Board {
     }
     /**
      * Checks which type of block the player has landed on, depending on that we do the action.
-     * @param mapWHomeAndRoad This is the hashmap of the board with properties.
+     * @param mapWHomeRoadCircle This is the hashmap of the board with properties.
      * @param currentPlayer This is the Player object of the player who wants to buy the property.
      */
-    public void landedOn(final HashMap<Integer,SpaceSquare> mapWHomeAndRoad,final Player currentPlayer){
-        if (mapWHomeAndRoad.get(currentPlayer.getPosition()) instanceof Property currentProperty && currentProperty.returnOwner() == null){
+    public void landedOn(final HashMap<Integer,SpaceSquare> mapWHomeRoadCircle, final Player currentPlayer){
+        if (mapWHomeRoadCircle.get(currentPlayer.getPosition()) instanceof Property currentProperty && currentProperty.returnOwner() == null){
+            System.out.println("You landed on "+currentProperty.getPropertyName()+" with a purchase price of $"+currentProperty.getValueOfProperty());
             UserInputManager userInputManager = new UserInputManager();
             if(userInputManager.doesPlayerWantToBuyProperty()){
                 currentProperty.playerBuysProperty(currentPlayer);
             }
-        } else if (mapWHomeAndRoad.get(currentPlayer.getPosition()) instanceof Property currentProperty && currentProperty.returnOwner() != currentPlayer) {
+        } else if (mapWHomeRoadCircle.get(currentPlayer.getPosition()) instanceof Property currentProperty && currentProperty.returnOwner() != currentPlayer) {
+            System.out.println("You landed on "+currentProperty.getPropertyName()+" which is owned by Player "+currentProperty.returnOwner().getPlayerNumber());
+            System.out.println("You have to pay RENT!");
             currentProperty.carryOutRental(currentPlayer);
+        } else if (mapWHomeRoadCircle.get(currentPlayer.getPosition()) instanceof CycleRace) {
+            System.out.println("You landed on Cycle Space and the Road is CLOSED, roll 1,2 or 3 to continue!");
+            currentPlayer.setAsOnACycleSquareStatus(true);
         }
+    }
+    /**
+     * Calculates the number of cycle squares the boardMap should contain. Since we need one square at least and the size of
+     * the board has to be 10-50. If I put 10% of the board should be cycle squares. We should get a reasonable amount of cycle
+     * squares.
+     * @return The number of Cycle squares to put into the board.
+     */
+    public int calculateAmountOfCycleSquares() {
+        int amountOfCycleSquares = Math.toIntExact(Math.round(size * 0.1));
+        return amountOfCycleSquares;
+    }
+    /**
+     * Adds the Cycle race squares to the board map depending on the amount of calculated number of cycle squares.
+     * @param mapWHomeRoadAndProperty
+     * @param amountOfCycleSquares
+     * @return The boardMap containing the Home, Roads, Properties and Circle Square.
+     */
+    public HashMap<Integer, SpaceSquare> addCycleSquare(final HashMap<Integer,SpaceSquare> mapWHomeRoadAndProperty, final int amountOfCycleSquares) {
+        int max = mapWHomeRoadAndProperty.size();
+        int min = 2;
+        Random rand = new Random();
+        int counter = 0;
+        while(counter < amountOfCycleSquares){
+            int cyclePosition = rand.nextInt(max - min + 1) + min;
+            if (mapWHomeRoadAndProperty.get(cyclePosition) instanceof Road) {
+                mapWHomeRoadAndProperty.put(cyclePosition,new CycleRace(cyclePosition));
+                counter++;
+            }
+            cyclePosition = rand.nextInt(max - min + 1) + min;
+        }
+        return mapWHomeRoadAndProperty;
     }
 }
