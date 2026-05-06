@@ -344,4 +344,23 @@ public class BoardChecks {
         }
         assertEquals(3,count);
     }
+
+    @Test
+    public void WhenAPlayerLandsOnAStationWhenThereAre3OfThemOnTheGameBoardThenTheyShouldBeTransferredToAnyOtherTwoStations() {
+        Board board = new Board(10);
+        HashMap<Integer, SpaceSquare> hashBoard = board.initiateBoard();
+        UndergroundStation station1 = new UndergroundStation(4);
+        UndergroundStation station2 = new UndergroundStation(8);
+        UndergroundStation station3 = new UndergroundStation(3);
+        hashBoard.put(4,station1);
+        hashBoard.put(8,station2);
+        hashBoard.put(3,station3);
+
+        Player player1 = new Player(1);
+
+        player1.setPosition(4);
+        board.landedOn(hashBoard,player1);
+
+        assertTrue(hashBoard.get(player1.getPosition()) instanceof UndergroundStation thisStation && thisStation != station1);
+    }
 }

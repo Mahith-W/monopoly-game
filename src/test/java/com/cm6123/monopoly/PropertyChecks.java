@@ -1,8 +1,12 @@
 package com.cm6123.monopoly;
 
+import com.cm6123.monopoly.game.Board;
 import com.cm6123.monopoly.game.Player;
 import com.cm6123.monopoly.game.Property;
+import com.cm6123.monopoly.game.SpaceSquare;
 import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -59,6 +63,20 @@ public class PropertyChecks {
         property.playerBuysProperty(player2);
 
         assertEquals(player1,property.returnOwner());
+    }
+    @Test
+    public void IfAPlayerHasAlreadyBoughtThePropertyAnotherPlayerShouldBePayingRent(){
+        Property property = new Property(3,300.00F,30.00F,"May Fair");
+        Player player1 = new Player(1);
+        Player player2 = new Player(2);
+        Board board = new Board(10);
+        HashMap<Integer, SpaceSquare> boardMap = board.initiateBoard();
+        boardMap.put(3,property);
+        property.playerBuysProperty(player1);
+        player2.setPosition(3);
+        board.landedOn(boardMap,player2);
+
+        assertEquals(970.00F,player2.getPlayerBalance());
     }
 
     @Test
