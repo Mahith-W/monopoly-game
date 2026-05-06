@@ -1,0 +1,30 @@
+100.0 10.0 Ashford Avenue
+150.0 15.0 Briarwood Close
+200.0 20.0 Kensington Row
+250.0 25.0 Camden Crescent
+300.0 30.0 Oxford Terrace
+210.0 21.0 Windsor Gardens
+170.0 17.0 Mayfair Heights
+320.0 30.0 Regent Square
+230.0 23.0 Victoria Embankment
+240.0 24.0 Baker Street West
+140.0 14.0 Willowbrook Lane
+300.0 30.0 Maple Grove
+400.0 40.0 Rosewood Park
+410.0 41.0 Cedar Hollow
+420.0 42.0 Elmbridge Way
+330.0 33.0 Foxglove Fields
+160.0 16.0 Hawthorn Rise
+340.0 34.0 Meadowvale Drive
+360.0 36.0 Silver Birch Road
+250.0 25.0 Cloverfield Court
+130.0 13.0 Dragonfly Quay
+160.0 14.0 Golden Crown Avenue
+470.0 47.0 Sapphire Square
+340.0 33.0 Clocktower Plaza
+400.0 40.0 Lantern Alley
+210.0 21.0 King’s Landing Road
+490.0 49.0 Merchant’s Wharf
+350.0 35.0 Ironbridge Crossing
+150.0 15.0 Albion Heights
+340.0 34.0 Jubilee Gardens

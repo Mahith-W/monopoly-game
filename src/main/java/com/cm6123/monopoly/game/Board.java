@@ -86,12 +86,12 @@ public class Board {
         int min = 2;
         Random rand = new Random();
         int counter = 0;
-        File listOfPropertyNames = new File("txtFileFolder/listOfPropertyNames.txt");
+        File listOfPropertyNames = new File("txtFileFolder/PropertiesDetails.txt");
         try (Scanner scanner = new Scanner(listOfPropertyNames)) {
             while (counter < amountOfProperties) {
                 int propertyPosition = rand.nextInt(max - min + 1) + min;
                 if (mapWHomeAndRoad.get(propertyPosition) instanceof Road) {
-                    mapWHomeAndRoad.put(propertyPosition, new Property(propertyPosition, 300.00F, 30.00F, scanner.nextLine()));
+                    mapWHomeAndRoad.put(propertyPosition, new Property(propertyPosition, scanner.nextFloat(), scanner.nextFloat(), scanner.nextLine().trim()));
                     counter++;
                 }
             }
