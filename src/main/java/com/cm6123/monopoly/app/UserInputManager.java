@@ -21,6 +21,8 @@ public class UserInputManager {
     /**
      * Gets the userinput for the number of players they got, it also uses exceptions to make
      * sure they enter an integer.
+     * I watched a YouTube video on Exceptions and the video's code I have used as inspiration here (the link contains the time frame).
+     * Link :- https://youtu.be/u1PROb-aRUI?t=258.
      * @return The number of players the user wants (unverified to context/brief so can sometimes
      * be higher than 10 or less than 2.
      */
