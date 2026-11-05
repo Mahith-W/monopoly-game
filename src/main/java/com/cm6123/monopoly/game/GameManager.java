@@ -88,7 +88,7 @@ public class GameManager {
 
     /**
      * Takes in the hashmap of the player objects and goes through each object to find the highest
-     * balane and displayes the winner.
+     * balance and displayes the winner.
      * @param hashMapOfPlayers Takes in the Hashmap of player objects.
      * @return The object of the player who won.
      */
@@ -103,19 +103,6 @@ public class GameManager {
         System.out.println("The winner is Player " + winner.getPlayerNumber()+" with $" + winner.getPlayerBalance());
         return winner;
     }
-//    /**
-//     * Adds the special squares to the boardMap containing just the Home Square and Roads.
-//     * @param boardMap passes in the initialised board with just the Home square and Roads.
-//     * @param boardClass passes in an object of the Board class.
-//     * @return The completed Board containng the special squares.
-//     */
-//    public HashMap<Integer, SpaceSquare> setUpSpecialSquares(final HashMap<Integer, SpaceSquare> boardMap,final Board boardClass) {
-//        HashMap<Integer, SpaceSquare> mapWHomeARoads = boardMap;
-//        mapWHomeARoads = boardClass.addPropertiesTOBoard(boardMap, boardClass.calculateTheAmountOfProperties());
-//        mapWHomeARoads = boardClass.addCycleSquare(boardMap,boardClass.calculateTheAmountOfProperties());
-//        mapWHomeARoads = boardClass.addUnderGroundStation(boardMap,3);
-//        return mapWHomeARoads;
-//    }
     /**
      * The main method.
      * @param args

@@ -198,9 +198,9 @@ public class PlayerChecks {
     }
 
     @Test
-    public void WhenAPlayerIsOnACycleSquareAndTheyRollAFourTheyShouldBeStillClassedAsOnACycleSquare() { // should also return 0 because
-        Player player = spy(new Player(1));                                            // the plan is to use the number to move the player
-        Dice cycleDice = mock(Dice.class);                                                              // using setNewPlayerPosition() in Board class.
+    public void WhenAPlayerIsOnACycleSquareAndTheyRollAFourTheyShouldBeStillClassedAsOnACycleSquare() {
+        Player player = spy(new Player(1));
+        Dice cycleDice = mock(Dice.class);
 
         when(cycleDice.roll()).thenReturn(4);
         doReturn(cycleDice).when(player).accessCycleDie();

@@ -53,7 +53,7 @@ public class PropertyChecks {
         assertEquals(property2.returnOwner(),player2);
     }
 
-    @Test // REPLACE THIS FOR A TEST FOR A TEST FOR RENTAL INSTEAD.
+    @Test
     public void IfAPlayerHasAlreadyBoughtThePropertyAnotherPlayerShouldNotBeAbleToBuyThatProperty() {
         Property property = new Property(1,300.00F,30.00F,"May Fair");
         Player player1 = new Player(1);

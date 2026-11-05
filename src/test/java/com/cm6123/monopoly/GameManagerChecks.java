@@ -42,18 +42,10 @@ public class GameManagerChecks {
         players.get(2).addBalance(1000.00F);
         assertEquals(players.get(1),gameManager.determineWinner(players));
     }
-    /*
-    The first time I used mockito I had a go at it and it failed. I know the reason why now(in this commit) and it's because
-    I was doing logic inside a mock which doesn't just work (should have used a spy). After I wrote the failed code I copied
-    and gave it to gpt with the error message on the console asking it what went wrong. I don't have access to that chat anymore
-    unfortunately because I was not signed in to ChatGPT. Above is the best way I can describe the prompt, the code GPT gave did
-    explain the difference of a mock and a real object and suggest I should use a real object for logical methods and mocks for well
-    the classes that don't need the logic. Another error after that was doNothing() for a method that returned a value which also
-    was wrong, but then later on after doing some tweaks myself the code did end up working. This test below I have used AI for. The
-    few tests below that are mocks are just me having a go at everything and with practice by the time I came to mocks in other classes (like Board).
-    I knew what I was doing. Sorry I couldn't provide the link to the prompt, not being signed in meant the history of the chat was not
-    saved online just local while the browser was open.
-    */
+/*
+    AI was used in the test below to understand how mocks work and why my previous attempt failed (difference between
+    a spy and a mock). The tests below this are me reflecting on that and progressively understood mocks better.
+ */
     @Test
     public void When2PlayersArePlayingTheyBothShouldHaveOneTurnWhenTheNumberOfTurnsForTheGameIsOne () {
         GameManager gameManager = new GameManager();
@@ -75,9 +67,7 @@ public class GameManagerChecks {
         verify(players.get(2), times(1)).rollDice();
     }
 
-    /*
-    This test was me having a go at everything, There is a mock of the Board Class which is unnessasary.
-     */
+
     @Test
     public void WhenAPlayerIsBankruptTheirTurnIsSkipped() {
         GameManager gameManager = new GameManager();
@@ -111,9 +101,7 @@ public class GameManagerChecks {
         verify(gameManager.getPlayers().get(2), times(0)).rollDice();
         verify(gameManager.getPlayers().get(3), times(3)).rollDice();
     }
-    /*
-    I understood mojority of mocks here, I still have that board class as an unnessary mock.
-     */
+
     @Test
     public void WhenAPlayerHasNotLandedOnACircleSquareTheyShouldNotBeRollingTheCircleDieItShouldBeTheDefault2Dice() {
         GameManager gameManager = new GameManager();
@@ -148,9 +136,7 @@ public class GameManagerChecks {
         verify(player1, times(1)).rollDiceForCycleRace();
 
     }
-    /*
-    By the time I got to here I pretty much knew what mocks were and had a good experience with it.
-     */
+
     @Test
     public void WhenAPlayerHasLandedOnACircleSquareAndTheyRollANumberLessThanOrEqualTo3TheyShouldMoveOutOfTheCircleSpaceAndMoveTheNumberOfSpaces() {
         GameManager gameManager = new GameManager();

@@ -77,7 +77,7 @@ public class Board {
     /**
      * Uses the board made before and adds the properties to the map and updates it.
      * Link to code that I used as inspiration:- https://www.w3schools.com/java/java_files_read.asp.
-     * Also used ChatGPT here lightly to find the "trim()" function. Luckily I got the link for this one :- https://chatgpt.com/s/t_69fb242f5ea881919c0967633628365f
+     * Also used ChatGPT here lightly to find the "trim()" function :- https://chatgpt.com/s/t_69fb242f5ea881919c0967633628365f
      * Since the link doesn't contain my prompt, I have also put a screenshot of my prompt and a part of GPT's respond in the "txtFileFolder" so it's easier to find.
      * @param mapWHomeAndRoad The hashmap of the map containing just a home and roads.
      * @param amountOfProperties The number of properties that are required for the board to contain.
