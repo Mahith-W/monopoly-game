@@ -1,23 +1,8 @@
-# Assessment Starter
+# The Project
+This is my code for a Monopoly Game in Java. We were given an assessment template by our lecturer and that is why there are two contributors otherwise, this was an individual assignment project.
 
-To use this project, you need to fork it in Gitlab.
+Please run this code in Java version 21 and to play the game run the main method inside of ```GameManager.Java```.
 
-Then, remove the fork relationship using Settings/Advanced.
+To build the report and run the tests. Please run ```Tasks/build/buildAndReport``` in an IDE after initialised as a Grade Project.
 
-Then, clone the project to your local environment.
-
-When you load the project into IntelliJ, make sure that you select the ```build.gradle``` file and then import as a project.
-
-IntelliJ may well ask you to select a Java SDK. Pick a OpenJDK 17 SDK.
-
-## On NSA Laptops or Cloud Desktop
-
-The Java SDK package is already installed. It has set the ```CLASSPATH``` environment variable and this interferes with the Gradle build.
-
-I have provided two scripts that will unset the ```CLASSPATH``` environment variable.
-
-For Powershell, there is ```build.ps1``` which you can run with ```.\build.ps1```.
-
-For Git Bash, there is ```build.sh``` which you can run with ```./build.sh```.
-
-Both of these scripts will run the Gradle task ```buildAndReport```. which is the same as what will be run on Gitlab CI.
+You can also find a small 2-minute demo on youtube [here](https://youtu.be/4VjmWCW0TX0).
